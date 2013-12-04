@@ -1,0 +1,29 @@
+package com.xizz.scoreoflife.object;
+
+import java.sql.Date;
+
+public class Event {
+	private String NEWLINE = System.getProperty("line.separator");
+	public long id;
+	public String name;
+	public int score;
+	public long startDate;
+
+	public Event() {
+		name = "";
+		score = 0;
+		startDate = 0;
+	}
+
+	public Event(String n, int s, long d) {
+		name = n;
+		score = s;
+		startDate = d;
+	}
+
+	@Override
+	public String toString() {
+		return name + NEWLINE + "Score: " + score + NEWLINE + "Start Date: "
+				+ new Date(startDate);
+	}
+}
