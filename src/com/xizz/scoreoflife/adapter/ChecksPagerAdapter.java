@@ -71,6 +71,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 		Util.removeLegacyChecks(mEvents, checks);
 		Util.linkEventChecks(mEvents, checks);
 		checksList.setAdapter(new ChecksAdapter(mContext, checks));
+
 		container.addView(view);
 		return view;
 	}
@@ -83,7 +84,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 	public long getFirstDay() {
 		return mFirstDay;
 	}
-	
+
 	private void createChecksIfNotExist(long date) {
 		List<EventCheck> checks = mSource.getChecks(date, date + DAY_MILLISECS
 				- 1);

@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.xizz.scoreoflife.adapter.ChecksPagerAdapter;
 import com.xizz.scoreoflife.db.DataSource;
+import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.util.Util;
 
 public class MainActivity extends FragmentActivity {
@@ -59,8 +59,23 @@ public class MainActivity extends FragmentActivity {
 		super.onDestroy();
 	}
 
-	public void clicked(View view) {
-		Toast.makeText(this, "clicked", Toast.LENGTH_LONG).show();
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
+
+		switch (requestCode) {
+		case Util.REQUEST_ADD:
+			Event event = new Event();
+			event.name = data.getStringExtra(Util.NAME);
+			event.score = data.getIntExtra(Util.SCORE, 0);
+			event.startDate = data.getLongExtra(Util.DATE, 0);
+			mSource.insertEvent(event);
+			break;
+		}
 	}
 
 	public void manageEvents(View view) {
@@ -73,6 +88,11 @@ public class MainActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
+	public void addEvent(View view) {
+		Intent intent = new Intent(this, EventInputActivity.class);
+		startActivityForResult(intent, Util.REQUEST_ADD);
+	}
+
 	private static int dateToIndex(long date, long startDate) {
 		return (int) ((date - startDate) / Util.ONEDAY);
 	}
@@ -81,4 +101,4 @@ public class MainActivity extends FragmentActivity {
 		return startDate + index * Util.ONEDAY;
 	}
 
-	}
+}

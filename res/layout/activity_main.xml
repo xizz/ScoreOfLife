@@ -9,11 +9,11 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/manage"
+            android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="manageEvents"
-            android:text="Manage Events" />
+            android:onClick="addEvent"
+            android:text="New Event" />
 
         <Button
             android:id="@+id/score"
@@ -21,12 +21,19 @@
             android:layout_height="wrap_content"
             android:onClick="showScore"
             android:text="My Score" />
+
+        <Button
+            android:id="@+id/manage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="manageEvents"
+            android:text="Manage Events" />
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
-        android:onClick="clicked"
         android:layout_width="match_parent"
-        android:layout_height="400dp" />
+        android:layout_height="400dp"
+        android:onClick="clicked" />
 
 </LinearLayout>
