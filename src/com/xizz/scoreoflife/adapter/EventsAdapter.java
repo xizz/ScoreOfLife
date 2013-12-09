@@ -61,4 +61,8 @@ public class EventsAdapter extends BaseAdapter {
 		mEvents.remove(event);
 	}
 
+	public void add(Event event) {
+		mEvents.add(event);
+	}
+
 }

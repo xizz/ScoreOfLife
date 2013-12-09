@@ -27,8 +27,6 @@ public class EventsActivity extends Activity implements
 	private EventsAdapter mAdapter;
 	private Event mEventClicked;
 
-	private final static String NEWLINE = System.getProperty("line.separator");
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,6 +98,8 @@ public class EventsActivity extends Activity implements
 			event.score = data.getIntExtra(Util.SCORE, 0);
 			event.startDate = data.getLongExtra(Util.DATE, 0);
 			mSource.insertEvent(event);
+			mAdapter.add(event);
+			mAdapter.notifyDataSetChanged();
 			break;
 		case Util.REQUEST_EDIT:
 			mEventClicked.name = data.getStringExtra(Util.NAME);
@@ -120,15 +120,14 @@ public class EventsActivity extends Activity implements
 				EventInputActivity.class);
 		inputIntent.putExtra(Util.NAME, event.name);
 		inputIntent.putExtra(Util.SCORE, event.score);
-		inputIntent.putExtra(Util.DATE,
-				new Date(event.startDate).toString());
+		inputIntent.putExtra(Util.DATE, new Date(event.startDate).toString());
 		startActivityForResult(inputIntent, Util.REQUEST_EDIT);
 	}
 
 	private void askForDelete(final Event event) {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-		alertBuilder
-				.setMessage(event + NEWLINE + NEWLINE + "Delete this item?");
+		alertBuilder.setMessage(event + Util.NEWLINE + Util.NEWLINE
+				+ "Delete this item?");
 		alertBuilder.setPositiveButton("Delete",
 				new DialogInterface.OnClickListener() {
 					@Override

@@ -66,6 +66,7 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 		}
 		if (score.length() == 0) {
 			mScoreView.setError("Missing event score.");
+			error = true;
 		}
 
 		if (error) {
