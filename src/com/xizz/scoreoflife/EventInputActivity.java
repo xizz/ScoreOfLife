@@ -54,29 +54,28 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 				+ String.format("%02d", dayOfMonth));
 	}
 
-	public void onClick(View view) throws ParseException {
-		boolean error = false;
+	public void onClick(View view) {
 		String name = mNameView.getText().toString();
 		String score = mScoreView.getText().toString();
 		String date = mDateView.getText().toString();
 
 		if (name.length() == 0) {
 			mNameView.setError("Missing event name.");
-			error = true;
+			return;
 		}
 		if (score.length() == 0) {
 			mScoreView.setError("Missing event score.");
-			error = true;
-		}
-
-		if (error) {
 			return;
 		}
 
 		Intent output = new Intent();
 		output.putExtra(Util.NAME, name);
 		output.putExtra(Util.SCORE, Integer.parseInt(score));
-		output.putExtra(Util.DATE, Util.DATE_FORMAT.parse(date).getTime());
+		try {
+			output.putExtra(Util.DATE, Util.DATE_FORMAT.parse(date).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		setResult(RESULT_OK, output);
 
 		finish();

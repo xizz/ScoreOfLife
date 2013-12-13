@@ -24,8 +24,8 @@ public class ScoreActivity extends Activity {
 
 		final DataSource data = DataSource.getDataSource(this);
 
-		final List<EventCheck> checks = data.getChecks(TODAY - Util.ONEDAY * 30,
-				System.currentTimeMillis());
+		final List<EventCheck> checks = data.getChecks(
+				TODAY - Util.ONEDAY * 30, System.currentTimeMillis());
 		final List<Event> events = data.getAllEvents();
 		Util.linkEventChecks(events, checks);
 
@@ -52,7 +52,7 @@ public class ScoreActivity extends Activity {
 
 	private int getTotalScore(List<Event> events, int days) {
 		int total = 0;
-		for (int i = 0; i < days; ++i) {
+		for (int i = 1; i <= days; ++i) {
 			for (Event e : events) {
 				if (e.startDate <= (TODAY - Util.ONEDAY * i)) {
 					total += e.score;
@@ -68,7 +68,7 @@ public class ScoreActivity extends Activity {
 			// The event start date might be modified, so we should make sure
 			// the check date is after the event start date
 			if (c.date >= c.event.startDate && c.isDone
-					&& c.date >= (TODAY - Util.ONEDAY * (days - 1))) {
+					&& c.date >= (TODAY - Util.ONEDAY * days) && c.date < TODAY) {
 				score += c.event.score;
 			}
 		}
