@@ -12,21 +12,23 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	public final static String ID = "_id";
 	public final static String NAME = "name";
 	public final static String SCORE = "score";
-	public final static String START_DATA = "start_date";
+	public final static String START_DATE = "start_date";
+	public final static String ORDER_INDEX = "order_index";
 
 	public final static String IS_DONE = "is_done";
 	public final static String EVENT_ID = "event_id";
 	public final static String DATE = "date";
 
 	public DBOpenHelper(Context context) {
-		super(context, "scoremylife.db", null, 1);
+		super(context, "scoremylife.db", null, 2);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + TABLE_EVENTS + "(" + ID
 				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, "
-				+ SCORE + " INTEGER, " + START_DATA + " INTEGER)");
+				+ SCORE + " INTEGER, " + START_DATE + " INTEGER " + ORDER_INDEX
+				+ " INTEGER)");
 		db.execSQL("CREATE TABLE " + TABLE_CHECKS + "(" + DATE + " INTEGER, "
 				+ IS_DONE + " INTEGER, " + EVENT_ID + " INTEGER, FOREIGN KEY("
 				+ EVENT_ID + ") REFERENCES " + TABLE_EVENTS + "(" + ID + "))");
@@ -34,8 +36,29 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHECKS);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
-		onCreate(db);
+		if (oldVersion == 1 && newVersion == 2)
+			upgrade1to2(db);
+	}
+
+	@Override
+	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		if (oldVersion == 2 && newVersion == 1)
+			downgrade2to1(db);
+
+	}
+
+	private void downgrade2to1(SQLiteDatabase db) {
+		db.execSQL("ALTER TABLE events RENAME TO eventsOld");
+		db.execSQL("CREATE TABLE " + TABLE_EVENTS + "(" + ID
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, "
+				+ SCORE + " INTEGER, " + START_DATE + " INTEGER " + ORDER_INDEX
+				+ " INTEGER)");
+		db.execSQL("INSERT INTO events SELECT _id, name, score, start_date FROM eventsOld");
+		db.execSQL("DROP TABLE IF EXISTS eventsOld");
+
+	}
+
+	private void upgrade1to2(SQLiteDatabase db) {
+		db.execSQL("ALTER TABLE events ADD order_index INTEGER");
 	}
 }

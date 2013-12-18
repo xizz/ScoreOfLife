@@ -27,7 +27,6 @@ public class MainActivity extends FragmentActivity {
 		mSource.open();
 
 		mPager = (ViewPager) findViewById(R.id.pager);
-
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
@@ -43,9 +44,10 @@ public class DataSource {
 		ContentValues values = new ContentValues();
 		values.put(DBOpenHelper.NAME, event.name);
 		values.put(DBOpenHelper.SCORE, event.score);
-		values.put(DBOpenHelper.START_DATA, event.startDate);
-
+		values.put(DBOpenHelper.START_DATE, event.startDate);
+		values.put(DBOpenHelper.ORDER_INDEX, event.index);
 		event.id = mDatabase.insert(DBOpenHelper.TABLE_EVENTS, null, values);
+		orderEventIndex();
 	}
 
 	public void insertCheck(EventCheck check) {
@@ -59,10 +61,13 @@ public class DataSource {
 
 	public void deleteEvent(Event event) {
 		String[] ids = { Long.toString(event.id) };
-		mDatabase.delete(DBOpenHelper.TABLE_CHECKS, DBOpenHelper.EVENT_ID
-				+ "=?", ids);
-		mDatabase
-				.delete(DBOpenHelper.TABLE_EVENTS, DBOpenHelper.ID + "=?", ids);
+		int result = mDatabase.delete(DBOpenHelper.TABLE_CHECKS,
+				DBOpenHelper.EVENT_ID + "=?", ids);
+		Log.d("xi", Integer.toString(result));
+		result = mDatabase.delete(DBOpenHelper.TABLE_EVENTS, DBOpenHelper.NAME
+				+ "=?", new String[] { event.name });
+		Log.d("xi", Integer.toString(result));
+		orderEventIndex();
 	}
 
 	public void updateEvent(Event event) {
@@ -70,7 +75,8 @@ public class DataSource {
 		values.put(DBOpenHelper.ID, event.id);
 		values.put(DBOpenHelper.NAME, event.name);
 		values.put(DBOpenHelper.SCORE, event.score);
-		values.put(DBOpenHelper.START_DATA, event.startDate);
+		values.put(DBOpenHelper.START_DATE, event.startDate);
+		values.put(DBOpenHelper.ORDER_INDEX, event.index);
 		String[] whereArgs = { Long.toString(event.id) };
 
 		mDatabase.update(DBOpenHelper.TABLE_EVENTS, values, DBOpenHelper.ID
@@ -104,7 +110,7 @@ public class DataSource {
 	public List<Event> getAllEvents() {
 		List<Event> events = new ArrayList<Event>();
 		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_EVENTS, null, null,
-				null, null, null, null);
+				null, null, null, DBOpenHelper.ORDER_INDEX);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			events.add(cursorToEvent(cursor));
@@ -114,10 +120,32 @@ public class DataSource {
 		return events;
 	}
 
-	public List<EventCheck> getAllChecks() {
+	// Need join query
+	// public List<EventCheck> getAllChecks() {
+	// List<EventCheck> checks = new ArrayList<EventCheck>();
+	// Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_CHECKS, null, null,
+	// null, null, null, null);
+	// cursor.moveToFirst();
+	// while (!cursor.isAfterLast()) {
+	// checks.add(cursorToCheck(cursor));
+	// cursor.moveToNext();
+	// }
+	// cursor.close();
+	// return checks;
+	// }
+
+	public List<EventCheck> getChecks(long startDate, long endDate) {
 		List<EventCheck> checks = new ArrayList<EventCheck>();
-		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_CHECKS, null, null,
-				null, null, null, null);
+		String[] dates = { Long.toString(startDate), Long.toString(endDate) };
+
+		final String query = "SELECT * FROM event_checks a INNER JOIN events b "
+				+ "ON a.event_id=b._id WHERE a.date BETWEEN ? AND ? "
+				+ "ORDER BY b.order_index";
+		Cursor cursor = mDatabase.rawQuery(query, dates);
+
+		// Cursor cursor = mDatabase
+		// .query(DBOpenHelper.TABLE_CHECKS, null, DBOpenHelper.DATE
+		// + " BETWEEN ? AND ?", dates, null, null, null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			checks.add(cursorToCheck(cursor));
@@ -127,19 +155,13 @@ public class DataSource {
 		return checks;
 	}
 
-	public List<EventCheck> getChecks(long startDate, long endDate) {
-		List<EventCheck> checks = new ArrayList<EventCheck>();
-		String[] dates = { Long.toString(startDate), Long.toString(endDate) };
-		Cursor cursor = mDatabase
-				.query(DBOpenHelper.TABLE_CHECKS, null, DBOpenHelper.DATE
-						+ " BETWEEN ? AND ?", dates, null, null, null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			checks.add(cursorToCheck(cursor));
-			cursor.moveToNext();
+	private void orderEventIndex() {
+		List<Event> events = getAllEvents();
+		for (int i = 0; i < events.size(); ++i) {
+			Event e = events.get(i);
+			e.index = i;
+			updateEvent(e);
 		}
-		cursor.close();
-		return checks;
 	}
 
 	private Event cursorToEvent(Cursor c) {
@@ -148,7 +170,8 @@ public class DataSource {
 		event.id = c.getLong(c.getColumnIndex(DBOpenHelper.ID));
 		event.name = c.getString(c.getColumnIndex(DBOpenHelper.NAME));
 		event.score = c.getInt(c.getColumnIndex(DBOpenHelper.SCORE));
-		event.startDate = c.getLong(c.getColumnIndex(DBOpenHelper.START_DATA));
+		event.startDate = c.getLong(c.getColumnIndex(DBOpenHelper.START_DATE));
+		event.index = c.getInt(c.getColumnIndex(DBOpenHelper.ORDER_INDEX));
 
 		return event;
 	}
@@ -162,4 +185,5 @@ public class DataSource {
 
 		return check;
 	}
+
 }

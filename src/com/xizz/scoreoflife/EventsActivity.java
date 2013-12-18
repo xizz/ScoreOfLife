@@ -65,20 +65,18 @@ public class EventsActivity extends Activity implements
 			int position, long id) {
 		mEventClicked = (Event) mAdapter.getItem(position);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		String[] options = { "Edit", "Delete" };
-		builder.setItems(options, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int index) {
-				switch (index) {
-				case 0:
-					editEvent(mEventClicked);
-					break;
-				case 1:
-					askForDelete(mEventClicked);
-					break;
-				}
-			}
-		});
-
+		// The first item cannot move up and the last item cannot move down,
+		// so the menu items needs to be handled differently.
+		if (position == 0) {
+			builder.setItems(new String[] { "Edit", "Delete", "Move Down" },
+					getFirstMenu(position));
+		} else if (position == mAdapter.getCount() - 1) {
+			builder.setItems(new String[] { "Move Up", "Edit", "Delete" },
+					getLastMenu(position));
+		} else {
+			builder.setItems(new String[] { "Move Up", "Edit", "Delete",
+					"Move Down" }, getMiddleMenu(position));
+		}
 		builder.show();
 		return true;
 	}
@@ -133,6 +131,7 @@ public class EventsActivity extends Activity implements
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						mSource.deleteEvent(event);
+
 						mAdapter.remove(event);
 						mAdapter.notifyDataSetChanged();
 					}
@@ -146,5 +145,77 @@ public class EventsActivity extends Activity implements
 				});
 
 		alertBuilder.show();
+	}
+
+	private DialogInterface.OnClickListener getFirstMenu(final int position) {
+		return new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int index) {
+				switch (index) {
+				case 0:
+					editEvent(mEventClicked);
+					break;
+				case 1:
+					askForDelete(mEventClicked);
+					break;
+				case 2:
+					swapIndex((Event) mAdapter.getItem(position + 1),
+							mEventClicked);
+					break;
+				}
+			}
+		};
+	}
+
+	private DialogInterface.OnClickListener getLastMenu(final int position) {
+		return new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int index) {
+				switch (index) {
+				case 0:
+					swapIndex((Event) mAdapter.getItem(position - 1),
+							mEventClicked);
+					break;
+				case 1:
+					editEvent(mEventClicked);
+					break;
+				case 2:
+					askForDelete(mEventClicked);
+					break;
+				}
+			}
+		};
+	}
+
+	private DialogInterface.OnClickListener getMiddleMenu(final int position) {
+		return new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int index) {
+				switch (index) {
+				case 0:
+					swapIndex((Event) mAdapter.getItem(position - 1),
+							mEventClicked);
+					break;
+				case 1:
+					editEvent(mEventClicked);
+					break;
+				case 2:
+					askForDelete(mEventClicked);
+					break;
+				case 3:
+					swapIndex((Event) mAdapter.getItem(position + 1),
+							mEventClicked);
+					break;
+				}
+			}
+		};
+	}
+
+	private void swapIndex(Event e1, Event e2) {
+		int tempIndex = e1.index;
+		e1.index = e2.index;
+		e2.index = tempIndex;
+		mSource.updateEvent(e1);
+		mSource.updateEvent(e2);
+		List<Event> events = mSource.getAllEvents();
+		mAdapter = new EventsAdapter(this, events);
+		mEventsView.setAdapter(mAdapter);
 	}
 }

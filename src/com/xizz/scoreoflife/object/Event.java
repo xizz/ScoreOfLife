@@ -8,17 +8,20 @@ public class Event {
 	public String name;
 	public int score;
 	public long startDate;
+	public int index;
 
 	public Event() {
 		name = "";
 		score = 0;
 		startDate = 0;
+		index = 0;
 	}
 
-	public Event(String n, int s, long d) {
+	public Event(String n, int s, long d, int i) {
 		name = n;
 		score = s;
 		startDate = d;
+		index = i;
 	}
 
 	@Override
