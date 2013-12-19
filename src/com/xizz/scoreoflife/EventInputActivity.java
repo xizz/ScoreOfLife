@@ -35,8 +35,8 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 		// Find out if this is call from new or edit.
 		if (date != null) {
 			mNameView.setText(intent.getStringExtra(Util.NAME));
-			mScoreView.setText(Integer.toString(intent.getIntExtra(
-					Util.SCORE, 0)));
+			mScoreView.setText(Integer.toString(intent.getIntExtra(Util.SCORE,
+					0)));
 			mDateView.setText(intent.getStringExtra(Util.DATE));
 			setTitle("Edit Event");
 		} else {
@@ -58,16 +58,17 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 		String name = mNameView.getText().toString();
 		String score = mScoreView.getText().toString();
 		String date = mDateView.getText().toString();
-
+		boolean error = false;
 		if (name.length() == 0) {
 			mNameView.setError("Missing event name.");
-			return;
+			error = true;
 		}
 		if (score.length() == 0) {
 			mScoreView.setError("Missing event score.");
-			return;
+			error = true;
 		}
-
+		if (error)
+			return;
 		Intent output = new Intent();
 		output.putExtra(Util.NAME, name);
 		output.putExtra(Util.SCORE, Integer.parseInt(score));
@@ -77,7 +78,6 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 			e.printStackTrace();
 		}
 		setResult(RESULT_OK, output);
-
 		finish();
 	}
 

@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.xizz.scoreoflife.adapter.ChecksPagerAdapter;
 import com.xizz.scoreoflife.db.DataSource;
@@ -23,6 +24,8 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		getActionBar().setDisplayShowTitleEnabled(false);
+		
 		mSource = DataSource.getDataSource(this);
 		mSource.open();
 
@@ -59,6 +62,31 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.add_event:
+			startActivityForResult(new Intent(this, EventInputActivity.class),
+					Util.REQUEST_ADD);
+			break;
+		case R.id.my_score:
+			startActivity(new Intent(this, ScoreActivity.class));
+			break;
+		case R.id.manage_events:
+			startActivity(new Intent(this, EventsActivity.class));
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
@@ -75,21 +103,6 @@ public class MainActivity extends FragmentActivity {
 			mSource.insertEvent(event);
 			break;
 		}
-	}
-
-	public void manageEvents(View view) {
-		Intent intent = new Intent(this, EventsActivity.class);
-		startActivity(intent);
-	}
-
-	public void showScore(View view) {
-		Intent intent = new Intent(this, ScoreActivity.class);
-		startActivity(intent);
-	}
-
-	public void addEvent(View view) {
-		Intent intent = new Intent(this, EventInputActivity.class);
-		startActivityForResult(intent, Util.REQUEST_ADD);
 	}
 
 	private static int dateToIndex(long date, long startDate) {

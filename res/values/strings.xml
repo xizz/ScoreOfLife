@@ -8,5 +8,9 @@
     <string name="title_activity_input">Create Event</string>
     <string name="title_activity_score">My Score</string>
     <string name="title_activity_event_detail">Event</string>
+    <string name="add_event">Add Event</string>
+    <string name="my_score">My Score</string>
+    <string name="manage_events">Mange Events</string>
+    
 
 </resources>

@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,7 +33,7 @@ public class EventsActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_events);
-
+		
 		mSource = DataSource.getDataSource(this);
 
 		mEventsView = (ListView) findViewById(R.id.eventsList);
@@ -46,6 +48,23 @@ public class EventsActivity extends Activity implements
 		mAdapter = new EventsAdapter(this, events);
 		mEventsView.setAdapter(mAdapter);
 		super.onResume();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.events, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.add_event:
+			startActivityForResult(new Intent(this, EventInputActivity.class),
+					Util.REQUEST_ADD);
+			break;
+		}
+		return true;
 	}
 
 	@Override
@@ -106,11 +125,6 @@ public class EventsActivity extends Activity implements
 			mSource.updateEvent(mEventClicked);
 			break;
 		}
-	}
-
-	public void addEvent(View view) {
-		Intent intent = new Intent(this, EventInputActivity.class);
-		startActivityForResult(intent, Util.REQUEST_ADD);
 	}
 
 	private void editEvent(Event event) {
