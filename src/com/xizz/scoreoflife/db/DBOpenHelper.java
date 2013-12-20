@@ -27,7 +27,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + TABLE_EVENTS + "(" + ID
 				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, "
-				+ SCORE + " INTEGER, " + START_DATE + " INTEGER " + ORDER_INDEX
+				+ SCORE + " INTEGER, " + START_DATE + " INTEGER, " + ORDER_INDEX
 				+ " INTEGER)");
 		db.execSQL("CREATE TABLE " + TABLE_CHECKS + "(" + DATE + " INTEGER, "
 				+ IS_DONE + " INTEGER, " + EVENT_ID + " INTEGER, FOREIGN KEY("
@@ -51,7 +51,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("ALTER TABLE events RENAME TO eventsOld");
 		db.execSQL("CREATE TABLE " + TABLE_EVENTS + "(" + ID
 				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, "
-				+ SCORE + " INTEGER, " + START_DATE + " INTEGER " + ORDER_INDEX
+				+ SCORE + " INTEGER, " + START_DATE + " INTEGER, " + ORDER_INDEX
 				+ " INTEGER)");
 		db.execSQL("INSERT INTO events SELECT _id, name, score, start_date FROM eventsOld");
 		db.execSQL("DROP TABLE IF EXISTS eventsOld");

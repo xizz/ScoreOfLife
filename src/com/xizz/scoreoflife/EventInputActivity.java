@@ -8,6 +8,8 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -47,6 +49,22 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.event_input, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.done_input:
+			doneInput();
+			break;
+		}
+		return true;
+	}
+	
+	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
 		mDateView.setText("" + year + "-"
@@ -54,7 +72,7 @@ public class EventInputActivity extends Activity implements OnDateSetListener {
 				+ String.format("%02d", dayOfMonth));
 	}
 
-	public void onClick(View view) {
+	private void doneInput() {
 		String name = mNameView.getText().toString();
 		String score = mScoreView.getText().toString();
 		String date = mDateView.getText().toString();

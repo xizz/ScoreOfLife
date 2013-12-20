@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -52,6 +54,25 @@ public class EventDetailActivity extends Activity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.event_detail, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.edit:
+			editEvent();
+			break;
+		case R.id.delete:
+			deleteEvent();
+			break;
+		}
+		return true;
+	}
+	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
@@ -71,7 +92,7 @@ public class EventDetailActivity extends Activity {
 		mDateView.setText("Start Date: " + new Date(mEvent.startDate));
 	}
 
-	public void editEvent(View view) {
+	private void editEvent() {
 		Intent inputIntent = new Intent(this, EventInputActivity.class);
 		inputIntent.putExtra(Util.NAME, mEvent.name);
 		inputIntent.putExtra(Util.SCORE, mEvent.score);
@@ -80,7 +101,7 @@ public class EventDetailActivity extends Activity {
 		startActivityForResult(inputIntent, Util.REQUEST_EDIT);
 	}
 
-	public void deleteEvent(View view) {
+	private void deleteEvent() {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setMessage(mEvent + Util.NEWLINE + Util.NEWLINE
 				+ "Delete this event?");

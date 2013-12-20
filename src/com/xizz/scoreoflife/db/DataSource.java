@@ -159,7 +159,7 @@ public class DataSource {
 		List<Event> events = getAllEvents();
 		for (int i = 0; i < events.size(); ++i) {
 			Event e = events.get(i);
-			e.index = i;
+			e.index = i + 1;
 			updateEvent(e);
 		}
 	}

@@ -11,6 +11,8 @@
     <string name="add_event">Add Event</string>
     <string name="my_score">My Score</string>
     <string name="manage_events">Mange Events</string>
-    
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
