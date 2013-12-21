@@ -39,25 +39,4 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewDate"
-        android:layout_below="@+id/textViewDate"
-        android:layout_marginTop="8dp"
-        android:onClick="editEvent"
-        android:text="Edit" />
-
-    <Button
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonEdit"
-        android:layout_alignBottom="@+id/buttonEdit"
-        android:layout_toRightOf="@+id/buttonEdit"
-        android:layout_marginLeft="8dp"
-        android:onClick="deleteEvent"
-        android:text="Delete" />
-
 </RelativeLayout>

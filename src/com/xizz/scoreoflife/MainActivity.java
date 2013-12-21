@@ -24,8 +24,6 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		getActionBar().setDisplayShowTitleEnabled(false);
-		
 		mSource = DataSource.getDataSource(this);
 		mSource.open();
 
