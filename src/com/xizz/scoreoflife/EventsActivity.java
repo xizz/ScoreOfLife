@@ -145,7 +145,6 @@ public class EventsActivity extends Activity implements
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						mSource.deleteEvent(event);
-
 						mAdapter.remove(event);
 						mAdapter.notifyDataSetChanged();
 					}

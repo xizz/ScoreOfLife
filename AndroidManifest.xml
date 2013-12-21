@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xizz.scoreoflife"
-    android:versionCode="8"
-    android:versionName="1.7" >
+    android:versionCode="9"
+    android:versionName="1.8" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -24,11 +24,7 @@
         </activity>
         <activity
             android:name="com.xizz.scoreoflife.EventsActivity"
-            android:label="@string/title_activity_events"
-            android:parentActivityName="com.xizz.scoreoflife.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xizz.scoreoflife.MainActivity" />
+            android:label="@string/title_activity_events" >
         </activity>
         <activity
             android:name="com.xizz.scoreoflife.EventInputActivity"
@@ -36,19 +32,11 @@
         </activity>
         <activity
             android:name="com.xizz.scoreoflife.ScoreActivity"
-            android:label="@string/title_activity_score"
-            android:parentActivityName="com.xizz.scoreoflife.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xizz.scoreoflife.MainActivity" />
+            android:label="@string/title_activity_score" >
         </activity>
         <activity
             android:name="com.xizz.scoreoflife.EventDetailActivity"
-            android:label="@string/title_activity_event_detail"
-            android:parentActivityName="com.xizz.scoreoflife.EventsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xizz.scoreoflife.EventsActivity" />
+            android:label="@string/title_activity_event_detail" >
         </activity>
     </application>
 
