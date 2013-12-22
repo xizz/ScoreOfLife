@@ -33,7 +33,7 @@ public class EventsActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_events);
-		
+
 		mSource = DataSource.getDataSource(this);
 
 		mEventsView = (ListView) findViewById(R.id.eventsList);
@@ -86,7 +86,10 @@ public class EventsActivity extends Activity implements
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		// The first item cannot move up and the last item cannot move down,
 		// so the menu items needs to be handled differently.
-		if (position == 0) {
+		if (mAdapter.getCount() == 1) {
+			builder.setItems(new String[] { "Edit", "Delete" },
+					getOnlyMenu(position));
+		} else if (position == 0) {
 			builder.setItems(new String[] { "Edit", "Delete", "Move Down" },
 					getFirstMenu(position));
 		} else if (position == mAdapter.getCount() - 1) {
@@ -158,6 +161,22 @@ public class EventsActivity extends Activity implements
 				});
 
 		alertBuilder.show();
+	}
+
+	private DialogInterface.OnClickListener getOnlyMenu(final int position) {
+		return new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int index) {
+				switch (index) {
+				case 0:
+					editEvent(mEventClicked);
+					break;
+				case 1:
+					askForDelete(mEventClicked);
+					break;
+
+				}
+			}
+		};
 	}
 
 	private DialogInterface.OnClickListener getFirstMenu(final int position) {
