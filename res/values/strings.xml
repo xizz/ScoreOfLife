@@ -14,5 +14,8 @@
     <string name="done">Done</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="current_events">Current Events</string>
+    <string name="past_events">Past Events</string>
+    <string name="future_events">Future Events</string>
 
 </resources>

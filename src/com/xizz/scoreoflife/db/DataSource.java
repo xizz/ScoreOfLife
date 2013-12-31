@@ -45,7 +45,8 @@ public class DataSource {
 		values.put(DBOpenHelper.NAME, event.name);
 		values.put(DBOpenHelper.SCORE, event.score);
 		values.put(DBOpenHelper.START_DATE, event.startDate);
-		values.put(DBOpenHelper.ORDER_INDEX, event.index);
+		values.put(DBOpenHelper.END_DATE, event.endDate);
+		values.put(DBOpenHelper.ORDER_INDEX, event.orderIndex);
 		event.id = mDatabase.insert(DBOpenHelper.TABLE_EVENTS, null, values);
 		orderEventIndex();
 	}
@@ -76,7 +77,8 @@ public class DataSource {
 		values.put(DBOpenHelper.NAME, event.name);
 		values.put(DBOpenHelper.SCORE, event.score);
 		values.put(DBOpenHelper.START_DATE, event.startDate);
-		values.put(DBOpenHelper.ORDER_INDEX, event.index);
+		values.put(DBOpenHelper.END_DATE, event.endDate);
+		values.put(DBOpenHelper.ORDER_INDEX, event.orderIndex);
 		String[] whereArgs = { Long.toString(event.id) };
 
 		mDatabase.update(DBOpenHelper.TABLE_EVENTS, values, DBOpenHelper.ID
@@ -95,7 +97,13 @@ public class DataSource {
 				+ "=? AND " + DBOpenHelper.EVENT_ID + "=?", whereArgs);
 	}
 
-	public void deleteCheck(long eventId) {
+	public void deleteCheck(long eventId, long date) {
+		String[] whereArgs = { Long.toString(eventId), Long.toString(date) };
+		mDatabase.delete(DBOpenHelper.TABLE_CHECKS, DBOpenHelper.EVENT_ID
+				+ "=? AND " + DBOpenHelper.DATE + "=?", whereArgs);
+	}
+
+	public void deleteChecksByEventId(long eventId) {
 		String[] whereArgs = { Long.toString(eventId) };
 		mDatabase.delete(DBOpenHelper.TABLE_CHECKS, DBOpenHelper.EVENT_ID
 				+ "=?", whereArgs);
@@ -108,9 +116,59 @@ public class DataSource {
 	}
 
 	public List<Event> getAllEvents() {
-		List<Event> events = new ArrayList<Event>();
 		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_EVENTS, null, null,
 				null, null, null, DBOpenHelper.ORDER_INDEX);
+
+		List<Event> events = new ArrayList<Event>();
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			events.add(cursorToEvent(cursor));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return events;
+	}
+
+	public List<Event> getEvents(long date) {
+		String d = Long.toString(date);
+		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_EVENTS, null,
+				DBOpenHelper.START_DATE + " <=? AND " + DBOpenHelper.END_DATE
+						+ " >=?", new String[] { d, d }, null, null,
+				DBOpenHelper.ORDER_INDEX);
+
+		List<Event> events = new ArrayList<Event>();
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			events.add(cursorToEvent(cursor));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return events;
+	}
+
+	public List<Event> getPastEvents(long date) {
+		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_EVENTS, null,
+				DBOpenHelper.END_DATE + " <?",
+				new String[] { Long.toString(date) }, null, null,
+				DBOpenHelper.ORDER_INDEX);
+
+		List<Event> events = new ArrayList<Event>();
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			events.add(cursorToEvent(cursor));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return events;
+	}
+
+	public List<Event> getFutureEvents(long date) {
+		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_EVENTS, null,
+				DBOpenHelper.START_DATE + " >?",
+				new String[] { Long.toString(date) }, null, null,
+				DBOpenHelper.ORDER_INDEX);
+
+		List<Event> events = new ArrayList<Event>();
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			events.add(cursorToEvent(cursor));
@@ -159,7 +217,7 @@ public class DataSource {
 		List<Event> events = getAllEvents();
 		for (int i = 0; i < events.size(); ++i) {
 			Event e = events.get(i);
-			e.index = i + 1;
+			e.orderIndex = i + 1;
 			updateEvent(e);
 		}
 	}
@@ -171,7 +229,8 @@ public class DataSource {
 		event.name = c.getString(c.getColumnIndex(DBOpenHelper.NAME));
 		event.score = c.getInt(c.getColumnIndex(DBOpenHelper.SCORE));
 		event.startDate = c.getLong(c.getColumnIndex(DBOpenHelper.START_DATE));
-		event.index = c.getInt(c.getColumnIndex(DBOpenHelper.ORDER_INDEX));
+		event.endDate = c.getLong(c.getColumnIndex(DBOpenHelper.END_DATE));
+		event.orderIndex = c.getInt(c.getColumnIndex(DBOpenHelper.ORDER_INDEX));
 
 		return event;
 	}

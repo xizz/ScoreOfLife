@@ -28,8 +28,7 @@ public class EventCheck {
 			return new Date(date) + NEWLINE + isDone + NEWLINE
 					+ eventId;
 		} else
-			return new Date(date) + NEWLINE + isDone + NEWLINE
-					+ event;
+			return new Date(date) + NEWLINE + isDone + NEWLINE + event;
 	}
 
 }

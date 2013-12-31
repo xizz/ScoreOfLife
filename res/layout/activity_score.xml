@@ -18,7 +18,29 @@
         android:textStyle="bold|italic" />
 
     <TextView
-        android:id="@+id/scoreText"
+        android:id="@+id/scoreText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/scoreText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/scoreText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/scoreText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"

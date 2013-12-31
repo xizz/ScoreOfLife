@@ -1,10 +1,6 @@
 package com.xizz.scoreoflife.adapter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -22,9 +18,7 @@ import com.xizz.scoreoflife.util.Util;
 
 public class ChecksPagerAdapter extends PagerAdapter {
 
-	private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
-			"yyyy-MM-dd", Locale.ENGLISH);
-	private final static long TODAY = getToday();
+	private final static long TODAY = Util.getToday();
 	private final static long DAY_MILLISECS = 86400000;
 
 	private long mFirstDay;
@@ -89,18 +83,11 @@ public class ChecksPagerAdapter extends PagerAdapter {
 		List<EventCheck> checks = mSource.getChecks(date, date + DAY_MILLISECS
 				- 1);
 		for (Event e : mEvents) {
-			if (!eventExist(e, checks)) {
+			if (date >= e.startDate && date <= e.endDate
+					&& !eventExist(e, checks)) {
 				EventCheck check = new EventCheck(e.id, date);
 				mSource.insertCheck(check);
 			}
-		}
-	}
-
-	private static long getToday() {
-		try {
-			return DATE_FORMAT.parse(DATE_FORMAT.format(new Date())).getTime();
-		} catch (ParseException e) {
-			return 0;
 		}
 	}
 

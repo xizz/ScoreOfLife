@@ -1,83 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:text="Event Name" />
 
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Name your event"
+        android:hint="Name of the event"
         android:lines="1" >
 
         <requestFocus />
     </EditText>
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextName"
-        android:layout_below="@+id/editTextName"
-        android:layout_marginTop="8dp"
         android:text="Event Score" />
 
     <EditText
         android:id="@+id/editTextScore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="How many point?"
+        android:hint="How many points?"
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTextScore"
-        android:layout_below="@+id/editTextScore"
-        android:layout_marginTop="8dp"
-        android:text="Event Starting Date" />
+        android:text="Event Start Date" />
 
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:enabled="false"
-        android:inputType="none"
-        android:onClick="pickDate" />
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/buttonDate"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editTextStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:ems="10"
+            android:onClick="pickDate" />
+
+        <Button
+            android:id="@+id/buttonStartDate"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="pickStartDate"
+            android:text="Pick Date" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editTextDate"
-        android:layout_alignBottom="@+id/editTextDate"
-        android:layout_toRightOf="@+id/editTextDate"
-        android:onClick="pickDate"
-        android:text="Pick Date" />
+        android:orientation="horizontal" >
 
-</RelativeLayout>
+        <CheckBox
+            android:id="@+id/checkBoxEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event End Date" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/editTextEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:ems="10" />
+
+        <Button
+            android:id="@+id/buttonEndDate"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="pickEndDate"
+            android:text="Pick Date" />
+    </LinearLayout>
+
+</LinearLayout>

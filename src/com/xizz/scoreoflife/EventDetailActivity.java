@@ -17,14 +17,11 @@ import com.xizz.scoreoflife.util.Util;
 
 public class EventDetailActivity extends Activity {
 
-	private final static String NAME = "name";
-	private final static String SCORE = "score";
-	private final static String DATE = "date";
-
 	private DataSource mSource;
 	private TextView mNameView;
 	private TextView mScoreView;
-	private TextView mDateView;
+	private TextView mStartDateView;
+	private TextView mEndDateView;
 	private Event mEvent;
 
 	@Override
@@ -38,18 +35,22 @@ public class EventDetailActivity extends Activity {
 
 		mNameView = (TextView) findViewById(R.id.textViewName);
 		mScoreView = (TextView) findViewById(R.id.textViewScore);
-		mDateView = (TextView) findViewById(R.id.textViewDate);
+		mStartDateView = (TextView) findViewById(R.id.textViewStartDate);
+		mEndDateView = (TextView) findViewById(R.id.textViewEndDate);
 
 		mEvent = new Event();
 		mEvent.id = intent.getLongExtra(Util.ID, 0);
 		mEvent.name = intent.getStringExtra(Util.NAME);
 		mEvent.score = intent.getIntExtra(Util.SCORE, 0);
-		mEvent.startDate = intent.getLongExtra(Util.DATE, 0);
+		mEvent.startDate = intent.getLongExtra(Util.START_DATE, 0);
+		mEvent.endDate = intent.getLongExtra(Util.END_DATE, 0);
 
 		mNameView.setText(mEvent.name);
 		mScoreView.setText("Score: " + mEvent.score);
-		mDateView.setText("Start Date: " + new Date(mEvent.startDate));
-
+		mStartDateView.setText("Start Date: " + new Date(mEvent.startDate));
+		String endDate = mEvent.endDate == Long.MAX_VALUE ? "Not Set"
+				: new Date(mEvent.endDate).toString();
+		mEndDateView.setText("End Date: " + endDate);
 	}
 
 	@Override
@@ -70,33 +71,37 @@ public class EventDetailActivity extends Activity {
 		}
 		return true;
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode != Util.REQUEST_EDIT
-				|| resultCode != RESULT_OK || data == null) {
+		if (requestCode != Util.REQUEST_EDIT || resultCode != RESULT_OK
+				|| data == null) {
 			return;
 		}
 
-		mEvent.name = data.getStringExtra(NAME);
-		mEvent.score = data.getIntExtra(SCORE, 0);
-		mEvent.startDate = data.getLongExtra(DATE, 0);
+		mEvent.name = data.getStringExtra(Util.NAME);
+		mEvent.score = data.getIntExtra(Util.SCORE, 0);
+		mEvent.startDate = data.getLongExtra(Util.START_DATE, 0);
+		mEvent.endDate = data.getLongExtra(Util.END_DATE, Long.MAX_VALUE);
 
 		mSource.updateEvent(mEvent);
 
 		mNameView.setText(mEvent.name);
 		mScoreView.setText("Score: " + mEvent.score);
-		mDateView.setText("Start Date: " + new Date(mEvent.startDate));
+		mStartDateView.setText("Start Date: " + new Date(mEvent.startDate));
+		String endDate = mEvent.endDate == Long.MAX_VALUE ? "Not Set"
+				: new Date(mEvent.endDate).toString();
+		mEndDateView.setText("End Date: " + endDate);
 	}
 
 	private void editEvent() {
 		Intent inputIntent = new Intent(this, EventInputActivity.class);
 		inputIntent.putExtra(Util.NAME, mEvent.name);
 		inputIntent.putExtra(Util.SCORE, mEvent.score);
-		inputIntent.putExtra(Util.DATE,
-				new Date(mEvent.startDate).toString());
+		inputIntent.putExtra(Util.START_DATE, mEvent.startDate);
+		inputIntent.putExtra(Util.END_DATE, mEvent.endDate);
 		startActivityForResult(inputIntent, Util.REQUEST_EDIT);
 	}
 

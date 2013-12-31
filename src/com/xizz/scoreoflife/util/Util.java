@@ -2,8 +2,8 @@ package com.xizz.scoreoflife.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,22 +17,24 @@ public class Util {
 	public final static long ONEDAY = 86400000;
 
 	public final static String NEWLINE = System.getProperty("line.separator");
-	
+
 	public final static String NAME = "name";
 	public final static String SCORE = "score";
-	public final static String DATE = "date";
+	public final static String START_DATE = "start_date";
+	public final static String END_DATE = "end_date";
 	public final static String ID = "id";
-	
 
 	public final static int REQUEST_ADD = 111;
 	public final static int REQUEST_EDIT = 222;
-	
+
+
 	public static void removeLegacyChecks(List<Event> events,
 			List<EventCheck> checks) {
-		List<EventCheck> removeList = new ArrayList<EventCheck>();
+		List<EventCheck> removeList = new LinkedList<EventCheck>();
 		for (Event e : events) {
 			for (EventCheck c : checks) {
-				if (c.eventId == e.id && c.date < e.startDate) {
+				if (c.eventId == e.id
+						&& (c.date < e.startDate || c.date > e.endDate)) {
 					removeList.add(c);
 				}
 			}

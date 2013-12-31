@@ -38,7 +38,7 @@ public class EventsAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View row = mInflater.inflate(R.layout.event, parent, false);
@@ -47,16 +47,23 @@ public class EventsAdapter extends BaseAdapter {
 				.findViewById(R.id.eventItemName);
 		final TextView scoreView = (TextView) row
 				.findViewById(R.id.eventItemScore);
-		final TextView dateView = (TextView) row
-				.findViewById(R.id.eventItemDate);
+		final TextView startDateView = (TextView) row
+				.findViewById(R.id.eventItemStartDate);
+		final TextView endDateView = (TextView) row
+				.findViewById(R.id.eventItemEndDate);
 		final Event event = mEvents.get(position);
 		nameView.setText(event.name);
 		scoreView.setText(Integer.toString(event.score));
-		dateView.setText(new Date(event.startDate).toString());
+		startDateView.setText(new Date(event.startDate).toString());
+		if (event.endDate != Long.MAX_VALUE) {
+			endDateView.setText(new Date(event.endDate).toString());
+		} else {
+			endDateView.setText("Not Set");
+		}
 
 		return (row);
 	}
-	
+
 	public void remove(Event event) {
 		mEvents.remove(event);
 	}

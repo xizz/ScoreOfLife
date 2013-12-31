@@ -97,7 +97,8 @@ public class MainActivity extends FragmentActivity {
 			Event event = new Event();
 			event.name = data.getStringExtra(Util.NAME);
 			event.score = data.getIntExtra(Util.SCORE, 0);
-			event.startDate = data.getLongExtra(Util.DATE, 0);
+			event.startDate = data.getLongExtra(Util.START_DATE, 0);
+			event.endDate = data.getLongExtra(Util.END_DATE, Long.MAX_VALUE);
 			mSource.insertEvent(event);
 			break;
 		}

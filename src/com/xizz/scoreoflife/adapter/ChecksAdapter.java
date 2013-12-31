@@ -1,6 +1,5 @@
 package com.xizz.scoreoflife.adapter;
 
-import java.sql.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -52,12 +51,9 @@ public class ChecksAdapter extends BaseAdapter {
 				.findViewById(R.id.eventItemName);
 		final TextView scoreView = (TextView) row
 				.findViewById(R.id.eventItemScore);
-		final TextView dateView = (TextView) row
-				.findViewById(R.id.eventItemDate);
 		final EventCheck check = mChecks.get(position);
 		nameView.setText(check.event.name);
 		scoreView.setText(Integer.toString(check.event.score));
-		dateView.setText(new Date(check.event.startDate).toString());
 
 		final CheckBox checkBox = (CheckBox) row.findViewById(R.id.isDone);
 		checkBox.setChecked(check.isDone);
@@ -76,5 +72,4 @@ public class ChecksAdapter extends BaseAdapter {
 		});
 		return row;
 	}
-
 }

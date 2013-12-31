@@ -1,6 +1,5 @@
 package com.xizz.scoreoflife;
 
-import java.sql.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -24,10 +23,16 @@ import com.xizz.scoreoflife.util.Util;
 public class EventsActivity extends Activity implements
 		OnItemLongClickListener, OnItemClickListener {
 
+	private final static int CURRENT_EVENTS = 11;
+	private final static int PAST_EVENTS = 22;
+	private final static int FUTURE_EVENTS = 33;
+
 	private DataSource mSource;
 	private ListView mEventsView;
 	private EventsAdapter mAdapter;
 	private Event mEventClicked;
+	private int mCurrentList = CURRENT_EVENTS;
+	private long mToday = Util.getToday();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +48,27 @@ public class EventsActivity extends Activity implements
 
 	@Override
 	protected void onResume() {
-		List<Event> events = mSource.getAllEvents();
+		loadEventList();
+		super.onResume();
+	}
+
+	private void loadEventList() {
+		List<Event> events = null;
+
+		switch (mCurrentList) {
+		case CURRENT_EVENTS:
+			events = mSource.getEvents(mToday);
+			break;
+		case PAST_EVENTS:
+			events = mSource.getPastEvents(mToday);
+			break;
+		case FUTURE_EVENTS:
+			events = mSource.getFutureEvents(mToday);
+			break;
+		}
 
 		mAdapter = new EventsAdapter(this, events);
 		mEventsView.setAdapter(mAdapter);
-		super.onResume();
 	}
 
 	@Override
@@ -63,7 +84,23 @@ public class EventsActivity extends Activity implements
 			startActivityForResult(new Intent(this, EventInputActivity.class),
 					Util.REQUEST_ADD);
 			break;
+		case R.id.current_events:
+			if (mCurrentList != CURRENT_EVENTS) {
+				mCurrentList = CURRENT_EVENTS;
+			}
+			break;
+		case R.id.past_events:
+			if (mCurrentList != PAST_EVENTS) {
+				mCurrentList = PAST_EVENTS;
+			}
+			break;
+		case R.id.future_events:
+			if (mCurrentList != FUTURE_EVENTS) {
+				mCurrentList = FUTURE_EVENTS;
+			}
+			break;
 		}
+		loadEventList();
 		return true;
 	}
 
@@ -75,7 +112,8 @@ public class EventsActivity extends Activity implements
 		intent.putExtra(Util.ID, event.id);
 		intent.putExtra(Util.NAME, event.name);
 		intent.putExtra(Util.SCORE, event.score);
-		intent.putExtra(Util.DATE, event.startDate);
+		intent.putExtra(Util.START_DATE, event.startDate);
+		intent.putExtra(Util.END_DATE, event.endDate);
 		startActivity(intent);
 	}
 
@@ -116,16 +154,19 @@ public class EventsActivity extends Activity implements
 			Event event = new Event();
 			event.name = data.getStringExtra(Util.NAME);
 			event.score = data.getIntExtra(Util.SCORE, 0);
-			event.startDate = data.getLongExtra(Util.DATE, 0);
+			event.startDate = data.getLongExtra(Util.START_DATE, 0);
+			event.endDate = data.getLongExtra(Util.END_DATE, Long.MAX_VALUE);
 			mSource.insertEvent(event);
-			mAdapter.add(event);
-			mAdapter.notifyDataSetChanged();
+			loadEventList();
 			break;
 		case Util.REQUEST_EDIT:
 			mEventClicked.name = data.getStringExtra(Util.NAME);
 			mEventClicked.score = data.getIntExtra(Util.SCORE, 0);
-			mEventClicked.startDate = data.getLongExtra(Util.DATE, 0);
+			mEventClicked.startDate = data.getLongExtra(Util.START_DATE, 0);
+			mEventClicked.endDate = data.getLongExtra(Util.END_DATE,
+					Long.MAX_VALUE);
 			mSource.updateEvent(mEventClicked);
+			loadEventList();
 			break;
 		}
 	}
@@ -135,7 +176,8 @@ public class EventsActivity extends Activity implements
 				EventInputActivity.class);
 		inputIntent.putExtra(Util.NAME, event.name);
 		inputIntent.putExtra(Util.SCORE, event.score);
-		inputIntent.putExtra(Util.DATE, new Date(event.startDate).toString());
+		inputIntent.putExtra(Util.START_DATE, event.startDate);
+		inputIntent.putExtra(Util.END_DATE, event.endDate);
 		startActivityForResult(inputIntent, Util.REQUEST_EDIT);
 	}
 
@@ -241,13 +283,11 @@ public class EventsActivity extends Activity implements
 	}
 
 	private void swapIndex(Event e1, Event e2) {
-		int tempIndex = e1.index;
-		e1.index = e2.index;
-		e2.index = tempIndex;
+		int tempIndex = e1.orderIndex;
+		e1.orderIndex = e2.orderIndex;
+		e2.orderIndex = tempIndex;
 		mSource.updateEvent(e1);
 		mSource.updateEvent(e2);
-		List<Event> events = mSource.getAllEvents();
-		mAdapter = new EventsAdapter(this, events);
-		mEventsView.setAdapter(mAdapter);
+		loadEventList();
 	}
 }
