@@ -48,7 +48,7 @@ public class EventInputActivity extends Activity {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,6 +73,9 @@ public class EventInputActivity extends Activity {
 
 		setStartDatePicker();
 		setEndDatePicker();
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 	}
 
 	@Override
@@ -84,6 +87,9 @@ public class EventInputActivity extends Activity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
 		case R.id.done_input:
 			doneInput();
 			break;

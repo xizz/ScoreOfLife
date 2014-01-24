@@ -50,14 +50,12 @@ public class ChecksPagerAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, int position) {
 		View view = mInflater.inflate(R.layout.checklist, container, false);
 
-		TextView dateView = (TextView) view.findViewById(R.id.dateText);
 		ListView checksList = (ListView) view.findViewById(R.id.checklist);
 		TextView emptyText = (TextView) view.findViewById(android.R.id.empty);
 
 		checksList.setEmptyView(emptyText);
 
 		long date = mFirstDay + DAY_MILLISECS * position;
-		dateView.setText(new java.sql.Date(date).toString());
 
 		createChecksIfNotExist(date);
 		List<EventCheck> checks = mSource.getChecks(date, date
@@ -73,6 +71,12 @@ public class ChecksPagerAdapter extends PagerAdapter {
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((View) object);
+	}
+
+	@Override
+	public CharSequence getPageTitle(int position) {
+		long date = mFirstDay + DAY_MILLISECS * position;
+		return new java.sql.Date(date).toString();
 	}
 
 	public long getFirstDay() {

@@ -51,6 +51,9 @@ public class EventDetailActivity extends Activity {
 		String endDate = mEvent.endDate == Long.MAX_VALUE ? "Not Set"
 				: new Date(mEvent.endDate).toString();
 		mEndDateView.setText("End Date: " + endDate);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 	}
 
 	@Override
@@ -62,6 +65,9 @@ public class EventDetailActivity extends Activity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
 		case R.id.edit:
 			editEvent();
 			break;

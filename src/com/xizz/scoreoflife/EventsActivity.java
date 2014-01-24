@@ -80,6 +80,9 @@ public class EventsActivity extends Activity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
 		case R.id.add_event:
 			startActivityForResult(new Intent(this, EventInputActivity.class),
 					Util.REQUEST_ADD);
@@ -87,20 +90,22 @@ public class EventsActivity extends Activity implements
 		case R.id.current_events:
 			if (mCurrentList != CURRENT_EVENTS) {
 				mCurrentList = CURRENT_EVENTS;
+				loadEventList();
 			}
 			break;
 		case R.id.past_events:
 			if (mCurrentList != PAST_EVENTS) {
 				mCurrentList = PAST_EVENTS;
+				loadEventList();
 			}
 			break;
 		case R.id.future_events:
 			if (mCurrentList != FUTURE_EVENTS) {
 				mCurrentList = FUTURE_EVENTS;
+				loadEventList();
 			}
 			break;
 		}
-		loadEventList();
 		return true;
 	}
 

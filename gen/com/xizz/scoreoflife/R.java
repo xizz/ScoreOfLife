@@ -31,7 +31,6 @@ public final class R {
         public static final int checkBoxEndDate=0x7f08000a;
         public static final int checklist=0x7f080013;
         public static final int current_events=0x7f08001d;
-        public static final int dateText=0x7f080012;
         public static final int delete=0x7f08001a;
         public static final int done_input=0x7f08001b;
         public static final int edit=0x7f080019;
@@ -49,11 +48,12 @@ public final class R {
         public static final int manage_events=0x7f080021;
         public static final int my_score=0x7f080020;
         public static final int pager=0x7f08000d;
+        public static final int pager_title_strip=0x7f08000e;
         public static final int past_events=0x7f08001e;
-        public static final int scoreText1=0x7f08000e;
-        public static final int scoreText2=0x7f08000f;
-        public static final int scoreText3=0x7f080010;
-        public static final int scoreText4=0x7f080011;
+        public static final int scoreText1=0x7f08000f;
+        public static final int scoreText2=0x7f080010;
+        public static final int scoreText3=0x7f080011;
+        public static final int scoreText4=0x7f080012;
         public static final int textViewEndDate=0x7f080003;
         public static final int textViewName=0x7f080000;
         public static final int textViewScore=0x7f080001;
