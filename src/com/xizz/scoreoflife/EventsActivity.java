@@ -119,6 +119,7 @@ public class EventsActivity extends Activity implements
 		intent.putExtra(Util.SCORE, event.score);
 		intent.putExtra(Util.START_DATE, event.startDate);
 		intent.putExtra(Util.END_DATE, event.endDate);
+		intent.putExtra(Util.ORDER_INDEX, event.orderIndex);
 		startActivity(intent);
 	}
 

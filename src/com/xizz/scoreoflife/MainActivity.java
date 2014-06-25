@@ -1,8 +1,8 @@
 package com.xizz.scoreoflife;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +12,7 @@ import com.xizz.scoreoflife.db.DataSource;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.util.Util;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends Activity {
 
 	private DataSource mSource;
 	private long mDisplayDate = -1;

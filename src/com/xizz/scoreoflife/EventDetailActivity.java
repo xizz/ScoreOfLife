@@ -44,6 +44,7 @@ public class EventDetailActivity extends Activity {
 		mEvent.score = intent.getIntExtra(Util.SCORE, 0);
 		mEvent.startDate = intent.getLongExtra(Util.START_DATE, 0);
 		mEvent.endDate = intent.getLongExtra(Util.END_DATE, 0);
+		mEvent.orderIndex = intent.getIntExtra(Util.ORDER_INDEX, 0);
 
 		mNameView.setText(mEvent.name);
 		mScoreView.setText("Score: " + mEvent.score);
