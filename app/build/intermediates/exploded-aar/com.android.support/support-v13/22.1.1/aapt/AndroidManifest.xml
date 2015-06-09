@@ -14,11 +14,11 @@
      limitations under the License.
 -->
 <manifest
-	package="android.support.v13"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+    package="android.support.v13"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<uses-sdk android:minSdkVersion="13"/>
+    <uses-sdk android:minSdkVersion="13"/>
 
-	<application/>
+    <application/>
 
 </manifest>

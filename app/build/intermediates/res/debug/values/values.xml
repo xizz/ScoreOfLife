@@ -15,7 +15,7 @@
     <string name="edit">Edit</string>
     <string name="future_events">Future Events</string>
     <string name="hello_world">Hello world!</string>
-    <string name="manage_events">Mange Events</string>
+    <string name="manage_events">Manage Events</string>
     <string name="my_score">My Score</string>
     <string name="past_events">Past Events</string>
     <string name="title_activity_event_detail">Event</string>
